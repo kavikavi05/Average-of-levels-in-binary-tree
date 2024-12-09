@@ -1,0 +1,73 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+
+typedef struct TreeNode TN_t;
+typedef struct M { double sum, count; struct M* next; } M_t;
+
+int traverse(TN_t* node, M_t** m, int depth) {
+    if(*m){ (*m)->sum+=node->val; (*m)->count++; }
+    else{ *m=malloc(sizeof(M_t)); (**m)=(M_t){node->val, 1, NULL}; }
+
+    int lDepth=depth, rDepth=depth;
+    if(node->left){ lDepth=traverse(node->left, &((*m)->next), depth+1); }
+    if(node->right){ rDepth=traverse(node->right, &((*m)->next), depth+1); }
+
+    return lDepth>=rDepth?lDepth:rDepth;
+}
+
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+double* averageOfLevels(TN_t* root, int* returnSize) {
+    M_t* m=NULL; int maxDepth=traverse(root, &m, 1);
+
+    double* result=malloc(maxDepth*sizeof(double)); *returnSize=0;
+    for(M_t* temp=m; temp; m=temp) {
+        result[(*returnSize)++]=temp->sum/temp->count;
+        temp=m->next; free(m);
+    }
+
+    return result;
+}/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+
+typedef struct TreeNode TN_t;
+typedef struct M { double sum, count; struct M* next; } M_t;
+
+int traverse(TN_t* node, M_t** m, int depth) {
+    if(*m){ (*m)->sum+=node->val; (*m)->count++; }
+    else{ *m=malloc(sizeof(M_t)); (**m)=(M_t){node->val, 1, NULL}; }
+
+    int lDepth=depth, rDepth=depth;
+    if(node->left){ lDepth=traverse(node->left, &((*m)->next), depth+1); }
+    if(node->right){ rDepth=traverse(node->right, &((*m)->next), depth+1); }
+
+    return lDepth>=rDepth?lDepth:rDepth;
+}
+
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+double* averageOfLevels(TN_t* root, int* returnSize) {
+    M_t* m=NULL; int maxDepth=traverse(root, &m, 1);
+
+    double* result=malloc(maxDepth*sizeof(double)); *returnSize=0;
+    for(M_t* temp=m; temp; m=temp) {
+        result[(*returnSize)++]=temp->sum/temp->count;
+        temp=m->next; free(m);
+    }
+
+    return result;
+}
